@@ -1,0 +1,26 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 20px;
+}
+
+.frame-container {
+    display: inline-block;
+    position: relative;
+    margin-top: 20px;
+}
+
+canvas {
+    border: 10px solid black; /* Customize your frame here */
+    border-radius: 15px;
+    max-width: 100%;
+    height: auto;
+}
+
+.controls {
+    margin-top: 20px;
+}
+
+label {
+    margin-right: 10px;
+}
