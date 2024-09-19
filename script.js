@@ -14,8 +14,8 @@ let yPos = 0;
 
 const frame = new Image();
 frame.src = './frame.png';  // Reference to the frame image
+frame.onload = drawImage;  // Ensure frame is drawn once it's loaded
 
-// Handle image upload
 upload.addEventListener("change", function () {
     const file = upload.files[0];
     const reader = new FileReader();
@@ -35,43 +35,39 @@ upload.addEventListener("change", function () {
     }
 });
 
-// Handle scale adjustment
 scaleControl.addEventListener("input", function () {
     scale = parseFloat(this.value);
     drawImage();
 });
 
-// Handle X position adjustment
 xPosControl.addEventListener("input", function () {
     xPos = parseInt(this.value);
     drawImage();
 });
 
-// Handle Y position adjustment
 yPosControl.addEventListener("input", function () {
     yPos = parseInt(this.value);
     drawImage();
 });
 
-// Draw the image with the frame
 function drawImage() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Draw the uploaded image
-    const imgWidth = img.width * scale;
-    const imgHeight = img.height * scale;
-    const imgX = (canvas.width - imgWidth) / 2 + xPos;
-    const imgY = (canvas.height - imgHeight) / 2 + yPos;
-    ctx.drawImage(img, imgX, imgY, imgWidth, imgHeight);
+    if (img.complete) {
+        // Draw the uploaded image
+        const imgWidth = img.width * scale;
+        const imgHeight = img.height * scale;
+        const imgX = (canvas.width - imgWidth) / 2 + xPos;
+        const imgY = (canvas.height - imgHeight) / 2 + yPos;
+        ctx.drawImage(img, imgX, imgY, imgWidth, imgHeight);
+    }
 
-    // Draw the frame image after the uploaded image
-    frame.onload = function () {
-        ctx.drawImage(frame, 0, 0, canvas.width, canvas.height); // Draw the frame over the canvas
-    };
-    ctx.drawImage(frame, 0, 0, canvas.width, canvas.height); // Ensure the frame is always drawn
+    // Draw the frame on top of the user image
+    if (frame.complete) {
+        ctx.drawImage(frame, 0, 0, canvas.width, canvas.height); // Draw the frame to fit the canvas
+    }
 }
 
-// Handle image download
 downloadButton.addEventListener("click", function () {
     const link = document.createElement('a');
     link.download = 'framed_image.png';
